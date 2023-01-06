@@ -101,6 +101,8 @@
 
 .leftSection {
   width: 35%;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .rightSection {

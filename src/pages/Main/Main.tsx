@@ -1,7 +1,12 @@
 import { useState } from "react";
+
+// Components
 import { Features } from "../../components/Features/Features";
 import { SideBar } from "../../components/SideBar/SideBar";
 import { Helmet } from "react-helmet";
+import { Shortener } from "../../components/Shortener/Shortener";
+
+// CSS
 import styles from "./Main.module.css";
 
 export const Main = () => {
@@ -84,7 +89,13 @@ export const Main = () => {
         />
       ) : null}
       <div className={styles.sectionsContainer}>
-        <div className={styles.leftSection}></div>
+        <div className={styles.leftSection}>
+          <Shortener
+            handleMyURLsClick={(event) => (
+              setSideBarVisible(true), setSideBarContentType("urls")
+            )}
+          />
+        </div>
         <div className={styles.rightSection}>
           <span>Tired of your long, ugly share link?</span>
           <span>
