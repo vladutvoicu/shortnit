@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// Functions
+import { useNavigate } from "react-router-dom";
 
 // Components
 import { Features } from "../../components/Features/Features";
@@ -9,7 +12,13 @@ import { Shortener } from "../../components/Shortener/Shortener";
 // CSS
 import styles from "./Main.module.css";
 
-export const Main = () => {
+type mainProps = {
+  sideBarContentType?: string | undefined;
+  blankPath?: boolean;
+};
+
+export const Main = (props: mainProps) => {
+  const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [sideBarVisible, setSideBarVisible] = useState<boolean | undefined>(
     undefined
@@ -18,11 +27,30 @@ export const Main = () => {
     string | undefined
   >(undefined);
 
+  useEffect(() => {
+    if (props.blankPath === true) {
+      navigate("/app");
+    }
+
+    if (props.sideBarContentType !== undefined) {
+      setSideBarContentType(props.sideBarContentType);
+      setSideBarVisible(true);
+    } else {
+      setSideBarVisible(undefined);
+      setSideBarContentType(undefined);
+    }
+  }, [props]);
+
   return (
     <div className={styles.container}>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>ShortnIt</title>
+        <title>
+          {sideBarContentType !== undefined
+            ? sideBarContentType.charAt(0).toUpperCase() +
+              sideBarContentType.slice(1)
+            : "ShortnIt"}
+        </title>
       </Helmet>
       <div className={styles.header}>
         <div className={styles.headerTitleContainer}>
@@ -31,48 +59,52 @@ export const Main = () => {
         <div className={styles.headerNavBarContainer}>
           <div className={styles.headerNavBar}>
             <span
-              className={`${styles.navBarItem} ${
-                sideBarContentType === "urls" ? styles.selectedNavBarItem : null
+              className={`${
+                sideBarContentType === "urls"
+                  ? styles.selectedNavBarItem
+                  : styles.navBarItem
               }`}
-              onClick={(event) => (
-                setSideBarVisible(true), setSideBarContentType("urls")
-              )}
+              onClick={(event) =>
+                sideBarContentType === "urls" ? null : navigate("/app/urls")
+              }
             >
               My URLs
             </span>
             <span
-              className={`${styles.navBarItem} ${
+              className={`${
                 sideBarContentType === "about"
                   ? styles.selectedNavBarItem
-                  : null
+                  : styles.navBarItem
               }`}
-              onClick={(event) => (
-                setSideBarVisible(true), setSideBarContentType("about")
-              )}
+              onClick={(event) =>
+                sideBarContentType === "about" ? null : navigate("/app/about")
+              }
             >
               How It Works
             </span>
             <span
-              className={`${styles.navBarItem} ${
-                sideBarContentType === "signUp"
+              className={`${
+                sideBarContentType === "register"
                   ? styles.selectedNavBarItem
-                  : null
+                  : styles.navBarItem
               }`}
-              onClick={(event) => (
-                setSideBarVisible(true), setSideBarContentType("signUp")
-              )}
+              onClick={(event) =>
+                sideBarContentType === "register"
+                  ? null
+                  : navigate("/app/register")
+              }
             >
               Sign Up
             </span>
             <span
-              className={`${styles.navBarItem} ${
-                sideBarContentType === "signIn"
+              className={`${
+                sideBarContentType === "login"
                   ? styles.selectedNavBarItem
-                  : null
+                  : styles.navBarItem
               }`}
-              onClick={(event) => (
-                setSideBarVisible(true), setSideBarContentType("signIn")
-              )}
+              onClick={(event) =>
+                sideBarContentType === "login" ? null : navigate("/app/login")
+              }
             >
               Sign In
             </span>
@@ -83,18 +115,12 @@ export const Main = () => {
         <SideBar
           visible={sideBarVisible}
           contentType={sideBarContentType}
-          handleXClick={(event) => (
-            setSideBarVisible(false), setSideBarContentType(undefined)
-          )}
+          handleXClick={(event) => navigate("/app")}
         />
       ) : null}
       <div className={styles.sectionsContainer}>
         <div className={styles.leftSection}>
-          <Shortener
-            handleMyURLsClick={(event) => (
-              setSideBarVisible(true), setSideBarContentType("urls")
-            )}
-          />
+          <Shortener handleMyURLsClick={(event) => navigate("/app/urls")} />
         </div>
         <div className={styles.rightSection}>
           <span>Tired of your long, ugly share link?</span>
@@ -108,9 +134,7 @@ export const Main = () => {
           {!loggedIn ? (
             <Features
               sideBarVisible={sideBarVisible}
-              handleButtonClick={(event) => (
-                setSideBarVisible(true), setSideBarContentType("signUp")
-              )}
+              handleButtonClick={(event) => navigate("/app/register")}
             />
           ) : null}
         </div>

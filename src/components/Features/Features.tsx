@@ -1,5 +1,8 @@
-import styles from "./Features.module.css";
+// Icons
 import { BsCheck } from "react-icons/bs";
+
+// CSS
+import styles from "./Features.module.css";
 
 type featuresProps = {
   handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -17,7 +20,7 @@ export const Features = (props: featuresProps) => {
         <BsCheck size={"1.6rem"} /> Full Link History
       </div>
       <div className={styles.feature}>
-        <BsCheck size={"1.6rem"} /> Customized 'Shortnd' Links
+        <BsCheck size={"1.6rem"} /> Unlimited customized 'Shortnd' Links
       </div>
       <div className={styles.buttonContainer}>
         <button

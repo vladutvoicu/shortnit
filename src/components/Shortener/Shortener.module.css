@@ -1,5 +1,6 @@
 .container,
-.extendedContainer {
+.extendedContainer,
+.initialContainer {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -12,6 +13,10 @@
   transition: 1s;
 }
 
+.initialContainer {
+  height: 330px;
+}
+
 .container {
   height: 360px;
   animation: 0.3s ease-out 0s 1 unextendContainer forwards;
@@ -21,7 +26,7 @@
   0% {
   }
   100% {
-    height: 350px;
+    height: 330px;
   }
 }
 

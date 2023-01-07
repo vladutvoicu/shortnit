@@ -18,7 +18,9 @@ type shortenerProps = {
 };
 
 export const Shortener = (props: shortenerProps) => {
-  const [shortenerStatus, setShortenerStatus] = useState<string>("");
+  const [shortenerStatus, setShortenerStatus] = useState<string | undefined>(
+    undefined
+  );
   const [urlInputValue, setUrlInputValue] = useState<string>("");
   const [validUrlInput, setValidUrlInput] = useState<boolean | undefined>(
     undefined
@@ -152,7 +154,9 @@ export const Shortener = (props: shortenerProps) => {
   return (
     <div
       className={`${
-        shortenerStatus === "finished"
+        shortenerStatus === undefined
+          ? styles.initialContainer
+          : shortenerStatus === "finished"
           ? styles.extendedContainer
           : styles.container
       }`}

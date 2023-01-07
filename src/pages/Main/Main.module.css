@@ -63,7 +63,8 @@
   z-index: 4;
 }
 
-.navBarItem {
+.navBarItem,
+.selectedNavBarItem {
   padding: 5px;
   border-radius: 10px;
   transition: 0.3s;
@@ -72,6 +73,7 @@
 
 .selectedNavBarItem {
   background-color: #4e4376;
+  cursor: default;
 }
 
 .navBarItem:hover {
