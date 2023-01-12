@@ -103,16 +103,16 @@ export const Shortener = (props: shortenerProps) => {
 
     if (url === "") {
       setValidUrlInput(false);
-      setShortenerStatus("");
+      setShortenerStatus(undefined);
       proceed = false;
     }
     if (alias === "") {
       setValidAliasInput(false);
-      setShortenerStatus("");
+      setShortenerStatus(undefined);
       proceed = false;
     }
     if (validUrlInput === false || validAliasInput === false) {
-      setShortenerStatus("");
+      setShortenerStatus(undefined);
       proceed = false;
     }
 
@@ -183,7 +183,7 @@ export const Shortener = (props: shortenerProps) => {
         ) : null}
         {validUrlInput === false ? (
           <div className={styles.errorCircleContainer}>
-            <BiErrorCircle className={styles.errorCircle} />
+            <BiErrorCircle className={styles.errorCircle} size={"1.3rem"} />
           </div>
         ) : null}
       </div>
@@ -217,7 +217,7 @@ export const Shortener = (props: shortenerProps) => {
           ) : null}
           {validAliasInput === false ? (
             <div className={styles.errorCircleContainer}>
-              <BiErrorCircle className={styles.errorCircle} />
+              <BiErrorCircle className={styles.errorCircle} size={"1.3rem"} />
             </div>
           ) : null}
         </div>

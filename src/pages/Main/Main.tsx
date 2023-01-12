@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // Functions
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Components
 import { Features } from "../../components/Features/Features";
@@ -19,6 +19,7 @@ type mainProps = {
 
 export const Main = (props: mainProps) => {
   const navigate = useNavigate();
+  const state = useLocation();
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [sideBarVisible, setSideBarVisible] = useState<boolean | undefined>(
     undefined
@@ -36,10 +37,16 @@ export const Main = (props: mainProps) => {
       setSideBarContentType(props.sideBarContentType);
       setSideBarVisible(true);
     } else {
-      setSideBarVisible(undefined);
+      // side bar animation will be canceled if "/" or "/app" path is refreshed
+      if (state["state"] !== null) {
+        state["state"]["xClicked"]
+          ? setSideBarVisible(false)
+          : setSideBarVisible(undefined);
+        window.history.replaceState({}, document.title);
+      }
       setSideBarContentType(undefined);
     }
-  }, [props]);
+  }, [props, navigate, state]);
 
   return (
     <div className={styles.container}>
@@ -54,7 +61,15 @@ export const Main = (props: mainProps) => {
       </Helmet>
       <div className={styles.header}>
         <div className={styles.headerTitleContainer}>
-          <span className={styles.headerTitle}>ShortnIt</span>
+          <span
+            className={styles.headerTitle}
+            onClick={(event) => (
+              navigate("/app", { state: { xClicked: false } }),
+              window.location.reload()
+            )}
+          >
+            ShortnIt
+          </span>
         </div>
         <div className={styles.headerNavBarContainer}>
           <div className={styles.headerNavBar}>
@@ -115,7 +130,9 @@ export const Main = (props: mainProps) => {
         <SideBar
           visible={sideBarVisible}
           contentType={sideBarContentType}
-          handleXClick={(event) => navigate("/app")}
+          handleXClick={(event) =>
+            navigate("/app", { state: { xClicked: true } })
+          }
         />
       ) : null}
       <div className={styles.sectionsContainer}>

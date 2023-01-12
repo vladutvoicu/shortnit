@@ -46,7 +46,8 @@
 .header {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: flex-start;
   width: 100%;
   font-size: 1.2rem;
 }
@@ -173,9 +174,7 @@
 }
 
 .mainButton:hover {
-  height: 51px;
-  width: 134px;
-  font-size: 1.3rem;
+  background-color: #005661;
 }
 
 .mainButton:active {
