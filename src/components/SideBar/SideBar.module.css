@@ -63,6 +63,7 @@
   font-size: 1.2rem;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
   transition: 0.3s;
 }
 
@@ -79,7 +80,6 @@
   padding: 5px;
   border-radius: 10px;
   transition: 0.3s;
-  cursor: pointer;
   font-weight: bold;
 }
 

@@ -16,10 +16,22 @@ function App() {
           element={<Main sideBarContentType="login" />}
         />
         <Route
+          path="/app/password/reset"
+          element={<Main sideBarContentType="reset" />}
+        />
+        <Route
           path="/app/about"
           element={<Main sideBarContentType="about" />}
         />
         <Route path="/app/urls" element={<Main sideBarContentType="urls" />} />
+        <Route
+          path="/app/urls/edit/:alias"
+          element={<Main sideBarContentType="edit" />}
+        />
+        <Route
+          path="/app/urls/stats/:alias"
+          element={<Main sideBarContentType="stats" />}
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-
-// Functions
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 // Components
@@ -27,6 +25,7 @@ export const Main = (props: mainProps) => {
   const [sideBarContentType, setSideBarContentType] = useState<
     string | undefined
   >(undefined);
+  const headerNavBarContainerRef = useRef(null);
 
   useEffect(() => {
     if (props.blankPath === true) {
@@ -37,12 +36,14 @@ export const Main = (props: mainProps) => {
       setSideBarContentType(props.sideBarContentType);
       setSideBarVisible(true);
     } else {
-      // side bar animation will be canceled if "/" or "/app" path is refreshed
+      // side bar animation will be canceled if "/" or "/app" path is accessed
       if (state["state"] !== null) {
         state["state"]["xClicked"]
           ? setSideBarVisible(false)
           : setSideBarVisible(undefined);
         window.history.replaceState({}, document.title);
+      } else if (props.sideBarContentType === undefined) {
+        setSideBarVisible(undefined);
       }
       setSideBarContentType(undefined);
     }
@@ -71,7 +72,10 @@ export const Main = (props: mainProps) => {
             ShortnIt
           </span>
         </div>
-        <div className={styles.headerNavBarContainer}>
+        <div
+          className={styles.headerNavBarContainer}
+          ref={headerNavBarContainerRef}
+        >
           <div className={styles.headerNavBar}>
             <span
               className={`${
@@ -130,9 +134,11 @@ export const Main = (props: mainProps) => {
         <SideBar
           visible={sideBarVisible}
           contentType={sideBarContentType}
+          loggedIn={loggedIn}
           handleXClick={(event) =>
             navigate("/app", { state: { xClicked: true } })
           }
+          headerNavBarContainerRef={headerNavBarContainerRef}
         />
       ) : null}
       <div className={styles.sectionsContainer}>
