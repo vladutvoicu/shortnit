@@ -74,10 +74,11 @@ export const Shortener = (props: shortenerProps) => {
 
   const handleShortener = (event: React.MouseEvent<HTMLButtonElement>) => {
     setShortenerStatus("loading");
-    var url = urlInputValue;
-    var alias = aliasInputValue;
-    var proceed = true;
+    var url: string = urlInputValue;
+    var alias: string = aliasInputValue;
+    var proceed: boolean = true;
 
+    // will move the below to api instead
     alias = alias.replace(/  +/g, " ");
     alias = alias.replace(/ /g, "-");
     alias = alias.replace(/--+/g, "-");
@@ -123,6 +124,8 @@ export const Shortener = (props: shortenerProps) => {
         `https://api.qrserver.com/v1/create-qr-code/?size=1200x1200&data=${finalUrl}`
       );
       setShortenerStatus("finished");
+    } else {
+      setShortenerStatus(undefined);
     }
   };
 

@@ -302,9 +302,9 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
-.shareContainer {
+.shareContainer,
+.sideBarShareContainer {
   position: absolute;
-  top: -320px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -317,12 +317,26 @@
   background-color: #282c47;
 }
 
-.triangle {
+.shareContainer {
+  top: -320px;
+}
+
+.sideBarShareContainer {
+  bottom: -320px;
+}
+
+.triangle,
+.sideBarTriangle {
   position: absolute;
   bottom: -15px;
   transform: rotateX(-180deg);
   color: #008394;
   z-index: -1;
+}
+
+.sideBarTriangle {
+  top: -15px;
+  transform: rotateX(0deg);
 }
 
 .shareContainerHeader {

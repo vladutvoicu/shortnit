@@ -24,6 +24,7 @@ type shareProps = {
   finalUrl: string;
   aliasInputValue: string;
   QRUrl: string;
+  insideSideBar?: boolean;
 };
 
 export const Share = (props: shareProps) => {
@@ -55,7 +56,14 @@ export const Share = (props: shareProps) => {
   };
 
   return (
-    <div className={styles.shareContainer} ref={shareContainerRef}>
+    <div
+      className={`${
+        props.insideSideBar === true
+          ? styles.sideBarShareContainer
+          : styles.shareContainer
+      }`}
+      ref={shareContainerRef}
+    >
       <div className={styles.shareContainerHeader}>
         <BsMegaphoneFill size={"1.2rem"} /> Share shortened URL
       </div>
@@ -105,7 +113,13 @@ export const Share = (props: shareProps) => {
           </div>
         </div>
       </div>
-      <BsTriangleFill className={styles.triangle} />
+      <BsTriangleFill
+        className={`${
+          props.insideSideBar === true
+            ? styles.sideBarTriangle
+            : styles.triangle
+        }`}
+      />
     </div>
   );
 };
