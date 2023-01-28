@@ -1,0 +1,263 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  animation: 0.5s ease-out 0s 1 fadeIn forwards;
+}
+
+@keyframes fadeIn {
+  100% {
+    opacity: 1;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 15%;
+  width: 100%;
+}
+
+.headerTitle {
+  font-size: 1.8rem;
+  font-family: "Francois One";
+  color: #00e1ff;
+}
+
+.headerSubTitle {
+  font-size: 1.1rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90%;
+  width: 60%;
+}
+
+.inputHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 10px;
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+.inputHeader:nth-child(1) {
+  margin-top: 20px;
+}
+
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.input,
+.invalidInput {
+  height: 100%;
+  width: 100%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  border-style: none;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  font-size: 1.1rem;
+  caret-color: black;
+  background-color: white;
+}
+
+.input:focus {
+  outline: none;
+  border-color: rgba(0, 131, 148, 1);
+}
+
+.invalidInput {
+  border-color: red;
+  color: red;
+}
+
+.invalidMessage {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: red;
+  opacity: 0;
+}
+
+.visibleErrorMessage {
+  opacity: 1;
+}
+
+.errorCircleContainer {
+  position: absolute;
+  right: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 8%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+}
+
+.errorCircle {
+  color: red;
+}
+
+.formText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10%;
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+.textLink {
+  margin-left: 10px;
+  color: #00e1ff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.textLink:hover {
+  text-decoration: underline;
+}
+
+.textLink:active {
+  opacity: 0.6;
+  transition: 0s;
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.option {
+  color: #00e1ff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.option:hover {
+  text-decoration: underline;
+}
+
+.option:active {
+  opacity: 0.6;
+  transition: 0s;
+}
+
+.checkboxContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.checkboxContainer:hover {
+  text-decoration: underline;
+}
+
+.checkboxContainer:active {
+  opacity: 0.6;
+  transition: 0s;
+}
+
+.checkbox,
+.checkedCheckbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 17px;
+  width: 17px;
+  border: 1px solid white;
+  border-radius: 3px;
+  transition: 0.3s;
+}
+
+.checkedCheckbox {
+  background-color: #008394;
+  border-color: #008394;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  border-style: none;
+  border-radius: 10px;
+  height: 47px;
+  width: 300px;
+  font-size: 1.2rem;
+  font-family: "Francois One";
+  color: white;
+  background-color: #008394;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
+  transition: 0.3s;
+}
+
+.button:hover {
+  background-color: #005661;
+}
+
+.button:active {
+  opacity: 0.6;
+  transition: 0s;
+}
+
+.buttonContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.spinner {
+  color: white;
+  animation: spin infinite 1s linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.resetInfoText {
+  font-size: 1.1rem;
+  text-align: center;
+}

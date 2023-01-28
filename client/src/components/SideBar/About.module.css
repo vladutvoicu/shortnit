@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-left: 30px;
+  padding-right: 30px;
+  opacity: 0;
+  animation: 0.5s ease-out 0s 1 fadeIn forwards;
+  overflow-y: overlay;
+}
+
+@keyframes fadeIn {
+  100% {
+    opacity: 1;
+  }
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.contentContainer:nth-child(2) {
+  justify-content: flex-end;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+.header {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #00e1ff;
+}
+
+.text {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 50%;
+}
+
+.icon {
+  height: 60px;
+  width: 60px;
+}
+
+.QRCode {
+  height: 90px;
+  width: 90px;
+}
