@@ -9,7 +9,7 @@ router.post(
     ValidateSchema(Schemas.url.create),
     controller.createUrl
 );
-router.get("/get/:urlId", controller.readUrl);
+router.get("/get/:userId", controller.readUserUrls);
 router.get("/get/", controller.readAll);
 router.patch(
     "/update/:urlId",

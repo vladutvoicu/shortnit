@@ -5,6 +5,7 @@ import { config } from "./config/config";
 import Logging from "./library/Logging";
 import userRoutes from "./routes/User";
 import urlRoutes from "./routes/Url";
+import resetTokenRoutes from "./routes/ResetToken";
 
 const router = express();
 
@@ -65,6 +66,12 @@ const StartServer = () => {
     /** Routes */
     router.use("/users", userRoutes);
     router.use("/urls", urlRoutes);
+    router.use("/resetTokens", resetTokenRoutes);
+
+    /** Get server side time */
+    router.get("/time", (req, res, next) => {
+        res.status(200).json({ message: new Date() });
+    });
 
     /** Healthcheck */
     router.get("/ping", (req, res, next) =>
