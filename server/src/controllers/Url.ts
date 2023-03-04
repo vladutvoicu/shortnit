@@ -4,14 +4,15 @@ import Url from "../models/Url";
 import User from "../models/User";
 
 const createUrl = (req: Request, res: Response, next: NextFunction) => {
-    const { user, sourceUrl, alias, shortUrl } = req.body;
+    const { user, sourceUrl, alias, shortUrl, redirectData } = req.body;
 
     const url = new Url({
         _id: new mongoose.Types.ObjectId(),
         user,
         sourceUrl,
-        shortUrl,
         alias,
+        shortUrl,
+        redirectData,
     });
 
     return User.findById(user)

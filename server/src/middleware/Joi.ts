@@ -43,6 +43,21 @@ export const Schemas = {
             sourceUrl: Joi.string().regex(urlRegex).required(),
             shortUrl: Joi.string().regex(urlRegex).required(),
             alias: Joi.string().required(),
+            redirectData: Joi.object({
+                users: Joi.array()
+                    .items(
+                        Joi.object({
+                            ip: Joi.string().required(),
+                            countryName: Joi.string().required(),
+                            continentCode: Joi.string().required(),
+                            totalClicks: Joi.number().required(),
+                        })
+                    )
+                    .required(),
+                uniqueClicks: Joi.number().required(),
+                mobileUsers: Joi.number().required(),
+                desktopUsers: Joi.number().required(),
+            }).required(),
         }),
         update: Joi.object<IUrl>({
             user: Joi.string()
@@ -51,6 +66,21 @@ export const Schemas = {
             sourceUrl: Joi.string().regex(urlRegex).required(),
             shortUrl: Joi.string().regex(urlRegex).required(),
             alias: Joi.string().required(),
+            redirectData: Joi.object({
+                users: Joi.array()
+                    .items(
+                        Joi.object({
+                            ip: Joi.string().required(),
+                            countryName: Joi.string().required(),
+                            continentCode: Joi.string().required(),
+                            totalClicks: Joi.number().required(),
+                        })
+                    )
+                    .required(),
+                uniqueClicks: Joi.number().required(),
+                mobileUsers: Joi.number().required(),
+                desktopUsers: Joi.number().required(),
+            }).required(),
         }),
     },
     resetToken: {

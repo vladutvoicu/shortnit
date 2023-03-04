@@ -5,6 +5,17 @@ export interface IUrl {
     sourceUrl: string;
     alias: string;
     shortUrl: string;
+    redirectData: {
+        users: Array<{
+            ip: string;
+            countryName: string;
+            continentCode: string;
+            totalClicks: number;
+        }>;
+        uniqueClicks: number;
+        mobileUsers: number;
+        desktopUsers: number;
+    };
 }
 
 export interface IUrlModel extends IUrl, Document {}
@@ -15,6 +26,7 @@ const UrlSchema: Schema = new Schema(
         sourceUrl: { type: String, required: true },
         shortUrl: { type: String, required: true },
         alias: { type: String, required: true },
+        redirectData: { type: Object, required: true },
     },
     {
         timestamps: true,
