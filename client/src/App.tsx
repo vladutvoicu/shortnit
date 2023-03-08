@@ -1,11 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Main } from "./pages/Main/Main";
+import { Redirect } from "./pages/Redirect/Redirect";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main blankPath={true} />} />
+        <Route path="/:urlId" element={<Redirect />} />
         <Route path="/app" element={<Main />} />
         <Route
           path="/app/register"

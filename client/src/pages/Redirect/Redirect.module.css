@@ -1,0 +1,34 @@
+.textContainer {
+  display: flex;
+  height: 30%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.redirectingText {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-items: center;
+  justify-content: center;
+}
+
+.link {
+  color: #00e1ff;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .textContainer {
+    height: 40%;
+  }
+  .redirectingText {
+    width: 80%;
+  }
+}
