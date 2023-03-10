@@ -4,6 +4,7 @@ import Logging from "../library/Logging";
 
 export const sendPasswordResetEmail = (email: string, resetToken: string) => {
     let transporter = nodemailer.createTransport({
+        name: "shortnIt",
         service: "gmail",
         auth: {
             user: config.smtp_credentials.email,

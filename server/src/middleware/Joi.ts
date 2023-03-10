@@ -85,9 +85,7 @@ export const Schemas = {
     },
     resetToken: {
         create: Joi.object<IResetToken>({
-            user: Joi.string()
-                .regex(/^[0-9a-fA-F]{24}$/)
-                .required(),
+            email: Joi.string().regex(emailRegex).required(),
         }),
     },
 };
