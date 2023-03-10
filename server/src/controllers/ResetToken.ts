@@ -19,7 +19,7 @@ const createResetToken = (req: Request, res: Response, next: NextFunction) => {
         .then((users) => {
             for (let i = 0; i < users.length; i++) {
                 if (users[i]["email"] === email) {
-                    ResetToken.find({ user: users[i]["_id"] })
+                    ResetToken.find({ email: email })
                         .then((resetTokens) => {
                             if (resetTokens.length < 5) {
                                 resetToken
