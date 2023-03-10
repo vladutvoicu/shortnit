@@ -17,6 +17,7 @@ type authFormProps = {
 
 export const AuthForm = (props: authFormProps) => {
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [authFormStatus, setAuthFormStatus] = useState<string | undefined>(
     undefined
   );
@@ -29,6 +30,7 @@ export const AuthForm = (props: authFormProps) => {
     boolean | undefined
   >(undefined);
   const [checkedBox, setCheckedBox] = useState<boolean>(false);
+  const [tooManyRequests, setTooManyRequests] = useState<boolean>(false);
 
   useEffect(() => {
     if (props.resetInput === true) {
@@ -113,8 +115,30 @@ export const AuthForm = (props: authFormProps) => {
     }
 
     if (proceed === true) {
-      // reset password via api
-      setAuthFormStatus("finished");
+      (async () => {
+        await fetch(`${apiUrl}/resetTokens/create/`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ email: emailInputValue }),
+        }).then((res) => {
+          if (!res.ok) {
+            res.json().then((error) => {
+              if (error.message === "Email not found") {
+                setAuthFormStatus(undefined);
+                setValidEmailInput(false);
+              } else {
+                setTooManyRequests(true);
+                setAuthFormStatus("finished");
+              }
+            });
+          } else {
+            console.log(res.json());
+            setAuthFormStatus("finished");
+          }
+        });
+      })().catch((error) => console.log(error));
     } else {
       setAuthFormStatus(undefined);
     }
@@ -188,8 +212,9 @@ export const AuthForm = (props: authFormProps) => {
         )}
         {props.authType === "reset" && authFormStatus === "finished" ? (
           <span className={styles.resetInfoText}>
-            You will be sent a password reset link shortly, it may take a few
-            minutes to recieve the email.
+            {tooManyRequests === true
+              ? "Too many reset requests, please wait 12 hours and try again."
+              : "You will be sent a password reset link shortly, it may take a few minutes to recieve the email."}
           </span>
         ) : null}
         {props.authType === "register" ||
@@ -239,12 +264,14 @@ export const AuthForm = (props: authFormProps) => {
         <button
           className={styles.button}
           onClick={(event) =>
-            props.authType === "login"
-              ? handleLogIn(event)
-              : props.authType === "register"
-              ? handleCreateAccount(event)
-              : props.authType === "reset"
-              ? handleResetPassword(event)
+            authFormStatus !== "loading"
+              ? props.authType === "login"
+                ? handleLogIn(event)
+                : props.authType === "register"
+                ? handleCreateAccount(event)
+                : props.authType === "reset"
+                ? handleResetPassword(event)
+                : null
               : null
           }
         >
