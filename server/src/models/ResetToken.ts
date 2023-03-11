@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface IResetToken {
     email: string;
+    user: string;
     urlId: string;
 }
 
@@ -10,6 +11,7 @@ export interface IResetTokenModel extends IResetToken, Document {}
 const ResetTokenSchema: Schema = new Schema(
     {
         email: { type: String, required: true },
+        user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
         urlId: { type: String, required: true },
         createdAt: { type: Date, default: Date.now },
     },

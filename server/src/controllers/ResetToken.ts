@@ -8,10 +8,12 @@ import * as crypto from "crypto";
 const createResetToken = (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
     var urlId = crypto.randomBytes(16).toString("hex");
+    var user = "";
 
     const resetToken = new ResetToken({
         _id: new mongoose.Types.ObjectId(),
         email,
+        user,
         urlId,
     });
 
@@ -22,6 +24,8 @@ const createResetToken = (req: Request, res: Response, next: NextFunction) => {
                     ResetToken.find({ email: email })
                         .then((resetTokens) => {
                             if (resetTokens.length < 5) {
+                                user = users[i]["_id"];
+                                resetToken["user"] = String(user);
                                 resetToken
                                     .save()
                                     .then((resetToken) => {
