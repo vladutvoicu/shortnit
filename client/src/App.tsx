@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Main } from "./pages/Main/Main";
 import { Redirect } from "./pages/Redirect/Redirect";
+import { PasswordReset } from "./pages/PasswordReset/PasswordReset";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           path="/app/password/reset"
           element={<Main sideBarContentType="reset" />}
         />
+        <Route path="/app/password/reset/:urlId" element={<PasswordReset />} />
         <Route
           path="/app/about"
           element={<Main sideBarContentType="about" />}
