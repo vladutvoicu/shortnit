@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Components
 import { Helmet } from "react-helmet";
@@ -15,6 +16,7 @@ import styles from "./PasswordReset.module.css";
 //50cd1be47a31508971fdab816e2ad43a
 export const PasswordReset = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
   const [validResetToken, setValidResetToken] = useState<boolean | undefined>(
     undefined
@@ -48,6 +50,10 @@ export const PasswordReset = () => {
         } else if (i === body["resetTokens"].length - 1) {
           setValidResetToken(false);
         }
+      }
+
+      if (body["resetTokens"].length === 0) {
+        setValidResetToken(false);
       }
     };
 
@@ -106,7 +112,7 @@ export const PasswordReset = () => {
       <span className={styles.subHeader} style={{ marginTop: "100px" }}>
         Password was successfuly resetted for {email}, now you can head over to
         the{" "}
-        <a className={styles.link} href={"https://shortnit.web.app/app/login"}>
+        <a className={styles.link} onClick={(event) => navigate("/app/login")}>
           login page
         </a>{" "}
         and sign in.
@@ -182,7 +188,7 @@ export const PasswordReset = () => {
       </button>
       <div
         className={mainStyles.logoContainer}
-        onClick={() => window.location.replace("https://shortnit.web.app/app")}
+        onClick={() => navigate("/app")}
       >
         <img
           className={mainStyles.logo}
@@ -202,7 +208,7 @@ export const PasswordReset = () => {
       </span>
       <div
         className={mainStyles.logoContainer}
-        onClick={() => window.location.replace("https://shortnit.web.app/app")}
+        onClick={() => navigate("/app")}
       >
         <img
           className={mainStyles.logo}
