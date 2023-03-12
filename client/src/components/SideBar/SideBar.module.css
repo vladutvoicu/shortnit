@@ -93,3 +93,11 @@
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.6);
 }
+
+.loggedInText {
+  display: flex;
+  height: 90%;
+  width: 100%;
+  font-size: 1.4rem;
+  justify-content: center;
+}

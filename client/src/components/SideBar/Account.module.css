@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  animation: 0.5s ease-out 0s 1 fadeIn forwards;
+}
+
+@keyframes fadeIn {
+  100% {
+    opacity: 1;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 15%;
+  width: 100%;
+}
+
+.headerTitle {
+  font-size: 1.4rem;
+  font-family: "Francois One";
+  color: white;
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  height: 47px;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid red;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background-color: red;
+}

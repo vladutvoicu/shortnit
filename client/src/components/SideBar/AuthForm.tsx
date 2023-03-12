@@ -57,7 +57,9 @@ export const AuthForm = (props: authFormProps) => {
     return result;
   };
 
-  const handleCreateAccount = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCreateAccount = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     setAuthFormStatus("loading");
     var proceed = true;
 
@@ -76,14 +78,37 @@ export const AuthForm = (props: authFormProps) => {
     }
 
     if (proceed === true) {
-      // create account via api
-      setAuthFormStatus("finished");
+      let userData = {
+        email: emailInputValue,
+        password: passwordInputValue,
+      };
+
+      const res = await fetch(`${apiUrl}/users/create/`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+      const body: any = await res.json();
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          ...userData,
+          user: body["user"]["_id"],
+          rememberLogin: true,
+        })
+      );
+
+      navigate("/app");
+      window.location.reload();
     } else {
       setAuthFormStatus(undefined);
     }
   };
 
-  const handleLogIn = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogIn = async (event: React.MouseEvent<HTMLButtonElement>) => {
     setAuthFormStatus("loading");
     var proceed = true;
 
@@ -98,8 +123,42 @@ export const AuthForm = (props: authFormProps) => {
     }
 
     if (proceed === true) {
-      // login via api
-      setAuthFormStatus("finished");
+      let userData = {
+        email: emailInputValue,
+        password: passwordInputValue,
+      };
+
+      const res = await fetch(`${apiUrl}/users/get/`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const body: any = await res.json();
+
+      for (let i = 0; i < body["users"].length; i++) {
+        if (body["users"][i]["email"] === emailInputValue) {
+          if (body["users"][i]["password"] === passwordInputValue) {
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                ...userData,
+                user: body["users"][i]["_id"],
+                rememberLogin: checkedBox,
+              })
+            );
+
+            setAuthFormStatus("finished");
+
+            navigate("/app");
+            window.location.reload();
+          }
+        } else if (i === body["users"].length - 1) {
+          setValidEmailInput(false);
+          setPasswordInputValue("");
+          setAuthFormStatus(undefined);
+        }
+      }
     } else {
       setAuthFormStatus(undefined);
     }

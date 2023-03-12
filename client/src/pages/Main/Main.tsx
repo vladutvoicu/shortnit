@@ -19,6 +19,7 @@ export const Main = (props: mainProps) => {
   const navigate = useNavigate();
   const state = useLocation();
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [userData, setUserData] = useState<{} | undefined>(undefined);
   const [sideBarVisible, setSideBarVisible] = useState<boolean | undefined>(
     undefined
   );
@@ -48,6 +49,34 @@ export const Main = (props: mainProps) => {
       setSideBarContentType(undefined);
     }
   }, [props, navigate, state]);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")!);
+
+    console.log(user);
+    if (user !== null) {
+      setUserData(user);
+      setLoggedIn(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    // when tab or browser is closed log out the user
+    window.addEventListener("beforeunload", function (e) {
+      if (userData!["rememberLogin" as keyof typeof userData] === false) {
+        localStorage.removeItem("user");
+        console.log("removed");
+      }
+    });
+
+    return () =>
+      window.removeEventListener("beforeunload", function (e) {
+        if (userData!["rememberLogin" as keyof typeof userData] === false) {
+          localStorage.removeItem("user");
+          console.log("removed");
+        }
+      });
+  });
 
   return (
     <div className={styles.container}>
@@ -101,32 +130,52 @@ export const Main = (props: mainProps) => {
             >
               How It Works
             </span>
-            <span
-              className={`${
-                sideBarContentType === "register"
-                  ? styles.selectedNavBarItem
-                  : styles.navBarItem
-              }`}
-              onClick={(event) =>
-                sideBarContentType === "register"
-                  ? null
-                  : navigate("/app/register")
-              }
-            >
-              Sign Up
-            </span>
-            <span
-              className={`${
-                sideBarContentType === "login"
-                  ? styles.selectedNavBarItem
-                  : styles.navBarItem
-              }`}
-              onClick={(event) =>
-                sideBarContentType === "login" ? null : navigate("/app/login")
-              }
-            >
-              Sign In
-            </span>
+            {loggedIn === false ? (
+              <span
+                className={`${
+                  sideBarContentType === "register"
+                    ? styles.selectedNavBarItem
+                    : styles.navBarItem
+                }`}
+                onClick={(event) =>
+                  sideBarContentType === "register"
+                    ? null
+                    : navigate("/app/register")
+                }
+              >
+                Sign Up
+              </span>
+            ) : null}
+            {loggedIn === false ? (
+              <span
+                className={`${
+                  sideBarContentType === "login"
+                    ? styles.selectedNavBarItem
+                    : styles.navBarItem
+                }`}
+                onClick={(event) =>
+                  sideBarContentType === "login" ? null : navigate("/app/login")
+                }
+              >
+                Sign In
+              </span>
+            ) : null}
+            {loggedIn === true ? (
+              <span
+                className={`${
+                  sideBarContentType === "account"
+                    ? styles.selectedNavBarItem
+                    : styles.navBarItem
+                }`}
+                onClick={(event) =>
+                  sideBarContentType === "account"
+                    ? null
+                    : navigate("/app/account")
+                }
+              >
+                Account
+              </span>
+            ) : null}
           </div>
         </div>
       </div>
@@ -135,6 +184,7 @@ export const Main = (props: mainProps) => {
           visible={sideBarVisible}
           contentType={sideBarContentType}
           loggedIn={loggedIn}
+          userData={userData}
           handleXClick={(event) =>
             navigate("/app", { state: { xClicked: true } })
           }

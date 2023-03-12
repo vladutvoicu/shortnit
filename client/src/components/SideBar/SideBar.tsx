@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from "react";
 import { About } from "./About";
 import { AuthForm } from "./AuthForm";
 import { Urls } from "./Urls";
+import { Account } from "./Account";
 
 // CSS
 import styles from "./SideBar.module.css";
@@ -12,6 +13,7 @@ type SideBarProps = {
   visible: boolean;
   contentType: string | undefined;
   loggedIn: boolean;
+  userData: {} | undefined;
   handleXClick: (event?: React.MouseEvent<HTMLDivElement>) => void;
   headerNavBarContainerRef: React.MutableRefObject<any>;
 };
@@ -20,13 +22,23 @@ export const SideBar = (props: SideBarProps) => {
   const renderContent = (content: string | undefined) => {
     switch (content) {
       case "login":
-        return <AuthForm key={"login"} authType={"login"} resetInput={true} />;
+        return props.loggedIn === false ? (
+          <AuthForm key={"login"} authType={"login"} resetInput={true} />
+        ) : (
+          <div className={styles.loggedInText}>You are already logged in!</div>
+        );
       case "register":
-        return (
+        return props.loggedIn === false ? (
           <AuthForm key={"register"} authType={"register"} resetInput={true} />
+        ) : (
+          <div className={styles.loggedInText}>You are already logged in!</div>
         );
       case "reset":
-        return <AuthForm key={"reset"} authType={"reset"} resetInput={true} />;
+        return props.loggedIn === false ? (
+          <AuthForm key={"reset"} authType={"reset"} resetInput={true} />
+        ) : (
+          <div className={styles.loggedInText}>You are already logged in!</div>
+        );
       case "about":
         return <About key={"about"} />;
       case "urls":
@@ -39,6 +51,8 @@ export const SideBar = (props: SideBarProps) => {
         return (
           <Urls key={"urls/stats"} loggedIn={props.loggedIn} option={"stats"} />
         );
+      case "account":
+        return <Account userData={props.userData} />;
       default:
         return null;
     }

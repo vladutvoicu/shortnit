@@ -29,6 +29,10 @@ function App() {
         />
         <Route path="/app/urls" element={<Main sideBarContentType="urls" />} />
         <Route
+          path="/app/account"
+          element={<Main sideBarContentType="account" />}
+        />
+        <Route
           path="/app/urls/edit/:alias"
           element={<Main sideBarContentType="edit" />}
         />
