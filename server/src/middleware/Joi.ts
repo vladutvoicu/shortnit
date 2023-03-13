@@ -42,7 +42,10 @@ export const Schemas = {
                 .required(),
             sourceUrl: Joi.string().regex(urlRegex).required(),
             shortUrl: Joi.string().regex(urlRegex).required(),
-            alias: Joi.string().required(),
+            alias: Joi.string()
+                .regex(/^[\w- ]*$/)
+                .regex(/^[a-z0-9_-]{3,30}$/)
+                .required(),
             redirectData: Joi.object({
                 users: Joi.array()
                     .items(
@@ -65,7 +68,10 @@ export const Schemas = {
                 .required(),
             sourceUrl: Joi.string().regex(urlRegex).required(),
             shortUrl: Joi.string().regex(urlRegex).required(),
-            alias: Joi.string().required(),
+            alias: Joi.string()
+                .regex(/^[\w- ]*$/)
+                .regex(/^[a-z0-9_-]{3,30}$/)
+                .required(),
             redirectData: Joi.object({
                 users: Joi.array()
                     .items(

@@ -4,7 +4,8 @@ import Url from "../models/Url";
 import User from "../models/User";
 
 const createUrl = (req: Request, res: Response, next: NextFunction) => {
-    const { user, sourceUrl, alias, shortUrl, redirectData } = req.body;
+    const { user, sourceUrl, shortUrl, redirectData } = req.body;
+    var { alias } = req.body;
 
     const url = new Url({
         _id: new mongoose.Types.ObjectId(),
@@ -18,10 +19,43 @@ const createUrl = (req: Request, res: Response, next: NextFunction) => {
     return User.findById(user)
         .then((user) =>
             user
-                ? url
-                      .save()
-                      .then((url) => res.status(201).json({ url }))
-                      .catch((error) => res.status(500).json({ error }))
+                ? (() => {
+                      alias = alias.replace(/  +/g, " ");
+                      alias = alias.replace(/ /g, "-");
+                      alias = alias.replace(/--+/g, "-");
+                      alias = alias.replace(/__+/g, "_");
+
+                      while (
+                          alias[0] === "-" ||
+                          alias[0] === "_" ||
+                          alias[alias.length - 1] === "-" ||
+                          alias[alias.length - 1] === "_"
+                      ) {
+                          if (alias[0] === "-" || alias[0] === "_") {
+                              alias = alias.slice(1);
+                          }
+                          if (
+                              alias[alias.length - 1] === "-" ||
+                              alias[alias.length - 1] === "_"
+                          ) {
+                              alias = alias.slice(0, alias.length - 1);
+                          }
+                          if (alias === "-" || alias === "_") {
+                              alias = "";
+                          }
+                      }
+                      url["alias"] = alias;
+
+                      if (alias !== "") {
+                          url.save()
+                              .then((url) => res.status(201).json({ url }))
+                              .catch((error) =>
+                                  res.status(500).json({ error })
+                              );
+                      } else {
+                          res.status(404).json({ message: "Invalid alias" });
+                      }
+                  })()
                 : res.status(404).json({ message: "User not found" })
         )
         .catch((error) => res.status(500).json({ error }));
