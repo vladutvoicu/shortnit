@@ -27,12 +27,22 @@ export const ValidateSchema = (schema: ObjectSchema) => {
 export const Schemas = {
     user: {
         create: Joi.object<IUser>({
-            email: Joi.string().regex(emailRegex).required(),
-            password: Joi.string().regex(passwordRegex).required(),
+            tempUser: Joi.boolean().required(),
+            email: Joi.string()
+                .regex(emailRegex)
+                .when("tempUser", { is: false, then: Joi.required() }),
+            password: Joi.string()
+                .regex(passwordRegex)
+                .when("tempUser", { is: false, then: Joi.required() }),
         }),
         update: Joi.object<IUser>({
-            email: Joi.string().required(),
-            password: Joi.string().regex(passwordRegex).required(),
+            tempUser: Joi.boolean().required(),
+            email: Joi.string()
+                .regex(emailRegex)
+                .when("tempUser", { is: false, then: Joi.required() }),
+            password: Joi.string()
+                .regex(passwordRegex)
+                .when("tempUser", { is: false, then: Joi.required() }),
         }),
     },
     url: {
