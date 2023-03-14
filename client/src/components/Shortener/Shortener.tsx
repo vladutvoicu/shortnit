@@ -15,9 +15,11 @@ import styles from "./Shortener.module.css";
 
 type shortenerProps = {
   handleMyURLsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  loggedIn: boolean;
 };
 
 export const Shortener = (props: shortenerProps) => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [shortenerStatus, setShortenerStatus] = useState<string | undefined>(
     undefined
   );
@@ -53,10 +55,9 @@ export const Shortener = (props: shortenerProps) => {
   const isValidAlias = (alias: string) => {
     var valid = true;
     var pattern = /^[\w- ]*$/;
-    var condition2 =
-      alias.length < 4 ? false : alias.length < 31 ? true : false;
+    var pattern2 = /^[a-z0-9_-]{3,30}$/;
 
-    if (pattern.test(alias) === false || condition2 === false) {
+    if (pattern.test(alias) === false || pattern2.test(alias) === false) {
       valid = false;
     }
     return valid;
@@ -72,13 +73,14 @@ export const Shortener = (props: shortenerProps) => {
     }
   };
 
-  const handleShortener = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleShortener = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     setShortenerStatus("loading");
     var url: string = urlInputValue;
     var alias: string = aliasInputValue;
     var proceed: boolean = true;
 
-    // will move the below to api instead
     alias = alias.replace(/  +/g, " ");
     alias = alias.replace(/ /g, "-");
     alias = alias.replace(/--+/g, "-");
@@ -112,6 +114,19 @@ export const Shortener = (props: shortenerProps) => {
       setShortenerStatus(undefined);
       proceed = false;
     }
+
+    // check if alias isn't already in use
+    const res = await fetch(`${apiUrl}/urls/get`);
+    const urlsData = await res.json();
+
+    for (let i = 0; i < urlsData["urls"].length; i++) {
+      if (alias === urlsData["urls"][i]["alias"]) {
+        setValidAliasInput(false);
+        setShortenerStatus(undefined);
+        proceed = false;
+      }
+    }
+
     if (validUrlInput === false || validAliasInput === false) {
       setShortenerStatus(undefined);
       proceed = false;
@@ -123,7 +138,77 @@ export const Shortener = (props: shortenerProps) => {
       setQRUrl(
         `https://api.qrserver.com/v1/create-qr-code/?size=1200x1200&data=${finalUrl}`
       );
-      setShortenerStatus("finished");
+      var user: any = JSON.parse(localStorage.getItem("user")!);
+
+      if (user === null) {
+        var body: any;
+        const res = await fetch(`${apiUrl}/users/create/`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ tempUser: true }),
+        }).then(async (res) => {
+          body = await res.json();
+          if (!res.ok) {
+            res.json().then((error) => {
+              console.log(error);
+              setShortenerStatus(undefined);
+            });
+          }
+        });
+
+        user = { user: body["user"]["_id"], tempUser: true };
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            user: body["user"]["_id"],
+            tempUser: true,
+          })
+        );
+      }
+
+      var urlData = {
+        user: user["user"],
+        sourceUrl: urlInputValue,
+        alias: alias,
+        shortUrl: finalUrl,
+        redirectData: {
+          users: [],
+          uniqueClicks: 0,
+          mobileUsers: 0,
+          desktopUsers: 0,
+        },
+      };
+
+      if (props.loggedIn === false) {
+        let tempUrls: any = JSON.parse(localStorage.getItem("tempUrls")!);
+        if (tempUrls !== null) {
+          tempUrls = [...tempUrls, urlData];
+        }
+
+        localStorage.setItem(
+          "tempUrls",
+          JSON.stringify(tempUrls !== null ? tempUrls : [urlData])
+        );
+      }
+
+      await fetch(`${apiUrl}/urls/create`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(urlData),
+      }).then((res) => {
+        if (!res.ok) {
+          res.json().then((error) => {
+            console.log(error);
+            setShortenerStatus(undefined);
+          });
+        } else {
+          setShortenerStatus("finished");
+        }
+      });
     } else {
       setShortenerStatus(undefined);
     }
@@ -279,7 +364,10 @@ export const Shortener = (props: shortenerProps) => {
               className={styles.firstRowButton}
               style={
                 copyButtonText === "Copied!"
-                  ? { backgroundColor: "#2db82d", borderColor: "#2db82d" }
+                  ? {
+                      backgroundColor: "#2db82d",
+                      borderColor: "#2db82d",
+                    }
                   : {}
               }
               onClick={(event) => handleCopyClick(event)}

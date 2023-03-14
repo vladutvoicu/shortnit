@@ -81,16 +81,35 @@ export const AuthForm = (props: authFormProps) => {
       let userData = {
         email: emailInputValue,
         password: passwordInputValue,
+        tempUser: false,
       };
 
-      const res = await fetch(`${apiUrl}/users/create/`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-      const body: any = await res.json();
+      var body: any;
+      let tempUserData: any = JSON.parse(localStorage.getItem("user")!);
+      if (tempUserData !== null) {
+        if (tempUserData["tempUser"] === true) {
+          const res = await fetch(
+            `${apiUrl}/users/update/${tempUserData["user"]}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-type": "application/json",
+              },
+              body: JSON.stringify({ ...userData }),
+            }
+          );
+          body = await res.json();
+        }
+      } else {
+        const res = await fetch(`${apiUrl}/users/create/`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+        body = await res.json();
+      }
 
       localStorage.setItem(
         "user",
@@ -134,16 +153,55 @@ export const AuthForm = (props: authFormProps) => {
           "Content-type": "application/json",
         },
       });
-      const body: any = await res.json();
+      const userBody: any = await res.json();
 
-      for (let i = 0; i < body["users"].length; i++) {
-        if (body["users"][i]["email"] === emailInputValue) {
-          if (body["users"][i]["password"] === passwordInputValue) {
+      for (let i = 0; i < userBody["users"].length; i++) {
+        if (userBody["users"][i]["email"] === emailInputValue) {
+          if (userBody["users"][i]["password"] === passwordInputValue) {
+            let tempUserData: any = JSON.parse(localStorage.getItem("user")!);
+            if (tempUserData !== null) {
+              const res = await fetch(
+                `${apiUrl}/urls/get/${tempUserData["user"]}`,
+                {
+                  method: "GET",
+                  headers: {
+                    "Content-type": "application/json",
+                  },
+                }
+              );
+              const urlsBody: any = await res.json();
+
+              for (let j = 0; j < urlsBody["urls"].length; j++) {
+                let urlData = urlsBody["urls"][j];
+                urlData["user"] = userBody["users"][i]["_id"];
+                let urlId = urlData["_id"];
+                delete urlData["_id"];
+                delete urlData["__v"];
+                delete urlData["createdAt"];
+                delete urlData["updatedAt"];
+
+                await fetch(`${apiUrl}/urls/update/${urlId}`, {
+                  method: "PATCH",
+                  headers: {
+                    "Content-type": "application/json",
+                  },
+                  body: JSON.stringify(urlData),
+                });
+              }
+
+              await fetch(`${apiUrl}/users/delete/${tempUserData["user"]}`, {
+                method: "DELETE",
+                headers: {
+                  "Content-type": "application/json",
+                },
+              });
+            }
+
             localStorage.setItem(
               "user",
               JSON.stringify({
                 ...userData,
-                user: body["users"][i]["_id"],
+                user: userBody["users"][i]["_id"],
                 rememberLogin: checkedBox,
               })
             );
@@ -152,8 +210,13 @@ export const AuthForm = (props: authFormProps) => {
 
             navigate("/app");
             window.location.reload();
+          } else {
+            setValidPasswordInput(false);
+            setPasswordInputValue("");
+            setAuthFormStatus(undefined);
           }
-        } else if (i === body["users"].length - 1) {
+          break;
+        } else if (i === userBody["users"].length - 1) {
           setValidEmailInput(false);
           setPasswordInputValue("");
           setAuthFormStatus(undefined);
@@ -193,7 +256,6 @@ export const AuthForm = (props: authFormProps) => {
               }
             });
           } else {
-            console.log(res.json());
             setAuthFormStatus("finished");
           }
         });

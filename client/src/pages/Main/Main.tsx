@@ -53,19 +53,20 @@ export const Main = (props: mainProps) => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user")!);
 
-    console.log(user);
     if (user !== null) {
       setUserData(user);
-      setLoggedIn(true);
+
+      if (user["tempUser"] !== true) {
+        setLoggedIn(true);
+      }
     }
   }, []);
 
   useEffect(() => {
-    // when tab or browser is closed log out the user
+    // when tab or browser is closed log out the user if "Remember Me" was not checked
     window.addEventListener("beforeunload", function (e) {
       if (userData!["rememberLogin" as keyof typeof userData] === false) {
         localStorage.removeItem("user");
-        console.log("removed");
       }
     });
 
@@ -73,7 +74,6 @@ export const Main = (props: mainProps) => {
       window.removeEventListener("beforeunload", function (e) {
         if (userData!["rememberLogin" as keyof typeof userData] === false) {
           localStorage.removeItem("user");
-          console.log("removed");
         }
       });
   });
@@ -193,7 +193,10 @@ export const Main = (props: mainProps) => {
       ) : null}
       <div className={styles.sectionsContainer}>
         <div className={styles.leftSection}>
-          <Shortener handleMyURLsClick={(event) => navigate("/app/urls")} />
+          <Shortener
+            loggedIn={loggedIn}
+            handleMyURLsClick={(event) => navigate("/app/urls")}
+          />
         </div>
         <div className={styles.rightSection}>
           <span>Tired of your long, ugly share link?</span>
