@@ -23,11 +23,13 @@ export const Redirect = () => {
 
     const updateUrlRedirectData = (ipData: any) => {
       if (sourceUrl === "" || sourceUrl === undefined) {
+        var date = new Date().toISOString();
         var user = {
           ip: ipData.ip,
           countryName: ipData.country_name,
           continentCode: ipData.continent_code,
           totalClicks: 0,
+          entries: [date],
         };
 
         (async () => {
@@ -44,6 +46,7 @@ export const Redirect = () => {
               for (let i = 0; i < urlUsers.length; i++) {
                 if (urlUsers[i]["ip"] === user["ip"]) {
                   user["totalClicks"] = Number(urlUsers[i]["totalClicks"]) + 1;
+                  user["entries"] = [...urlUsers[i]["entries"], date];
                   urlUsers[i] = user;
                   userFound = true;
                 }
