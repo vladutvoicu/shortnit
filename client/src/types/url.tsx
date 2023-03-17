@@ -1,8 +1,21 @@
 export interface Url {
-  key: number;
-  url: string;
+  _id?: string;
+  __v?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  user: string;
+  sourceUrl: string;
   alias: string;
   shortUrl: string;
-  date: string;
-  time: string;
+  redirectData: {
+    users: Array<{
+      ip: string;
+      countryName: string;
+      continentCode: string;
+      totalClicks: number;
+    }>;
+    uniqueClicks: number;
+    mobileUsers: number;
+    desktopUsers: number;
+  };
 }
