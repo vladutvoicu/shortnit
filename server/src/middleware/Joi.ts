@@ -64,6 +64,7 @@ export const Schemas = {
                             countryName: Joi.string().required(),
                             continentCode: Joi.string().required(),
                             totalClicks: Joi.number().required(),
+                            entries: Joi.array().required(),
                         })
                     )
                     .required(),
@@ -90,6 +91,7 @@ export const Schemas = {
                             countryName: Joi.string().required(),
                             continentCode: Joi.string().required(),
                             totalClicks: Joi.number().required(),
+                            entries: Joi.array().required(),
                         })
                     )
                     .required(),

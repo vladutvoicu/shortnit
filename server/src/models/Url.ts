@@ -11,6 +11,7 @@ export interface IUrl {
             countryName: string;
             continentCode: string;
             totalClicks: number;
+            entries: Array<string>;
         }>;
         uniqueClicks: number;
         mobileUsers: number;
