@@ -561,9 +561,9 @@ export const UrlComponent = (props: UrlProps) => {
                   <div key={index} className={styles.mapItem}>
                     {index !== 0 ? <div className={styles.separator} /> : null}
                     <span className={styles.mapHeader}>
-                      {new Date(entry["date"]).getDay() +
+                      {new Date(entry["date"]).getDate() +
                         " / " +
-                        new Date(entry["date"]).getMonth() +
+                        (new Date(entry["date"]).getMonth() + 1) +
                         " / " +
                         new Date(entry["date"]).getFullYear() +
                         " - " +
