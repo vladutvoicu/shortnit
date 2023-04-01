@@ -42,14 +42,30 @@ export const SideBar = (props: SideBarProps) => {
       case "about":
         return <About key={"about"} />;
       case "urls":
-        return <Urls key={"urls"} loggedIn={props.loggedIn} />;
+        return (
+          <Urls
+            key={"urls"}
+            userData={props.userData}
+            loggedIn={props.loggedIn}
+          />
+        );
       case "edit":
         return (
-          <Urls key={"urls/edit"} loggedIn={props.loggedIn} option={"edit"} />
+          <Urls
+            key={"urls/edit"}
+            userData={props.userData}
+            loggedIn={props.loggedIn}
+            option={"edit"}
+          />
         );
       case "stats":
         return (
-          <Urls key={"urls/stats"} loggedIn={props.loggedIn} option={"stats"} />
+          <Urls
+            key={"urls/stats"}
+            userData={props.userData}
+            loggedIn={props.loggedIn}
+            option={"stats"}
+          />
         );
       case "account":
         return <Account userData={props.userData} />;

@@ -24,12 +24,14 @@ export const Redirect = () => {
     const updateUrlRedirectData = (ipData: any) => {
       if (sourceUrl === "" || sourceUrl === undefined) {
         var date = new Date().toISOString();
+        var deviceType: string =
+          isBrowser === true ? "desktop" : isMobile === true ? "mobile" : "";
         var user = {
           ip: ipData.ip,
           countryName: ipData.country_name,
           continentCode: ipData.continent_code,
           totalClicks: 0,
-          entries: [date],
+          entries: [{ date: date, deviceType: deviceType }],
         };
 
         (async () => {
@@ -46,7 +48,10 @@ export const Redirect = () => {
               for (let i = 0; i < urlUsers.length; i++) {
                 if (urlUsers[i]["ip"] === user["ip"]) {
                   user["totalClicks"] = Number(urlUsers[i]["totalClicks"]) + 1;
-                  user["entries"] = [...urlUsers[i]["entries"], date];
+                  user["entries"] = [
+                    ...urlUsers[i]["entries"],
+                    { date: date, deviceType: deviceType },
+                  ];
                   urlUsers[i] = user;
                   userFound = true;
                 }
@@ -57,9 +62,9 @@ export const Redirect = () => {
                 urlData["redirectData"]["uniqueClicks"] += 1;
                 urlUsers.push(user);
 
-                if (isBrowser === true) {
+                if (deviceType === "desktop") {
                   urlData["redirectData"]["desktopUsers"] += 1;
-                } else if (isMobile === true) {
+                } else if (deviceType === "mobile") {
                   urlData["redirectData"]["mobileUsers"] += 1;
                 }
               }

@@ -13,6 +13,7 @@ export interface Url {
       countryName: string;
       continentCode: string;
       totalClicks: number;
+      entries: {}[];
     }>;
     uniqueClicks: number;
     mobileUsers: number;

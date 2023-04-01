@@ -1,4 +1,5 @@
-.container {
+.container,
+.spinnerContainer {
   display: block;
   flex-direction: column;
   height: 100%;
@@ -9,6 +10,12 @@
   animation: 0.5s ease-out 0s 1 fadeIn forwards;
   overflow-y: overlay;
   overflow-x: hidden;
+}
+
+.spinnerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes fadeIn {
@@ -118,6 +125,10 @@
   font-weight: bold;
 }
 
+.time {
+  font-size: 1rem;
+}
+
 .bottomContent {
   display: flex;
   flex-direction: row;
@@ -132,8 +143,11 @@
   align-items: flex-start;
   justify-content: space-evenly;
   height: 100%;
-  width: 200px;
   font-size: 1.1rem;
+}
+
+.bottomLeftContent {
+  width: 200px;
 }
 
 .bottomRightContent {
@@ -144,7 +158,7 @@
 
 .url {
   display: inline-block;
-  width: 100%;
+  width: 200px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

@@ -7,6 +7,7 @@ import { Url } from "../../types/url";
 // Icons
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { FaRegCopy } from "react-icons/fa";
+import { ImSpinner2 } from "react-icons/im";
 
 // Components
 import { UrlComponent } from "./UrlComponent";
@@ -14,15 +15,21 @@ import { Share } from "../Shortener/Share";
 
 // CSS
 import styles from "./Urls.module.css";
+import authFormStyles from "./AuthForm.module.css";
 
 type UrlProps = {
+  userData: {} | undefined;
   loggedIn: boolean;
   option?: string;
 };
 
+type UrlsStatus = "loading" | "fetched" | undefined;
+
 export const Urls = (props: UrlProps) => {
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL;
   const state = useLocation();
+  const [urlsStatus, setUrlsStatus] = useState<UrlsStatus>("loading");
   const [urls, setUrls] = useState<Url[]>([]);
   const [selectedUrl, setSelectedUrl] = useState<Url | undefined>(undefined);
   const [activeCopyButtonIndex, setActiveCopyButtonIndex] = useState<
@@ -37,9 +44,29 @@ export const Urls = (props: UrlProps) => {
   const [time, setTime] = useState<string | undefined>(undefined);
   const [notLoggedInError, setNotLoggedInError] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   // get server side date & time from api and set consts
-  // }, []);
+  useEffect(() => {
+    const fetchUrls = async () => {
+      const res = await fetch(
+        `${apiUrl}/urls/get/${
+          props.userData!["user" as keyof typeof props.userData]
+        }`
+      );
+      const body: any = await res.json();
+      setUrls(body["urls"]);
+      setUrlsStatus("fetched");
+    };
+
+    const fetchServerSideTime = async () => {
+      const res = await fetch(`${apiUrl}/time`);
+      const body: any = await res.json();
+
+      setDate(body["message"].split("T")[0]);
+      setTime(body["message"].split("T")[1].split(".")[0].slice(0, -3));
+    };
+
+    fetchServerSideTime();
+    fetchUrls();
+  }, [props.userData]);
 
   useEffect(() => {
     if (state["state"] !== null) {
@@ -51,18 +78,44 @@ export const Urls = (props: UrlProps) => {
 
   const getTimeLapsed = (
     date: string | undefined,
-    time: string | undefined
+    time: string | undefined,
+    urlCreatedAt: string | undefined
   ) => {
-    // calculate time lapsed from the creation of shortened url
-    time = "x hours/days ago";
-    return time;
+    var timeLapsed: string | number = "";
+    var urlCreationDate = urlCreatedAt!.split("T")[0];
+    var urlCreationTime = urlCreatedAt!
+      .split("T")[1]
+      .split(".")[0]
+      .slice(0, -3);
+
+    const d1 = new Date(urlCreationDate + " " + urlCreationTime).getTime();
+    const d2 = new Date(date + " " + time).getTime();
+    timeLapsed = Math.round((d2 - d1) / 60000);
+
+    if (timeLapsed < 60) {
+      timeLapsed === 1
+        ? (timeLapsed = "a minute ago")
+        : (timeLapsed = timeLapsed + " minutes ago");
+    } else if (timeLapsed >= 60 && timeLapsed < 1440) {
+      timeLapsed = String(timeLapsed / 60).split(".")[0];
+      timeLapsed === "1"
+        ? (timeLapsed = "an hour ago")
+        : (timeLapsed = timeLapsed + " hours ago");
+    } else if (timeLapsed >= 1440) {
+      timeLapsed = String(timeLapsed / 60 / 24).split(".")[0];
+      timeLapsed === "1"
+        ? (timeLapsed = "a day ago")
+        : (timeLapsed = timeLapsed + " days ago");
+    }
+
+    return timeLapsed;
   };
 
   const handleGoToClick = (
     event: React.MouseEvent<HTMLButtonElement>,
     shortUrl: string
   ) => {
-    window.open(`https://${shortUrl}`, "_blank");
+    window.open(`${shortUrl}`, "_blank");
   };
 
   const handleShareClick = (
@@ -120,7 +173,11 @@ export const Urls = (props: UrlProps) => {
     }
   };
 
-  return selectedUrl === undefined ? (
+  return urlsStatus === "loading" ? (
+    <div className={styles.spinnerContainer}>
+      <ImSpinner2 className={authFormStyles.spinner} size={"3rem"} />
+    </div>
+  ) : selectedUrl === undefined ? (
     <div className={styles.container}>
       {notLoggedInError === true ? (
         <div className={styles.notLoggedInError}>
@@ -143,7 +200,7 @@ export const Urls = (props: UrlProps) => {
         ) : null}
       </div>
       {urls.map((url, index) => (
-        <div className={styles.urlContainer}>
+        <div className={styles.urlContainer} key={url._id}>
           {index === 0 ? <div className={styles.topSeparator} /> : null}
           <div className={styles.linkImgContainer}>
             <img
@@ -156,8 +213,10 @@ export const Urls = (props: UrlProps) => {
             <span className={styles.shortUrl}>{url.shortUrl}</span>
             <div className={styles.bottomContent}>
               <div className={styles.bottomLeftContent}>
-                <span className={styles.url}>{url.url}</span>
-                <span className={styles.time}>{getTimeLapsed(date, time)}</span>
+                <span className={styles.url}>{url.sourceUrl}</span>
+                <span className={styles.time}>
+                  {getTimeLapsed(date, time, url.createdAt)}
+                </span>
               </div>
               <div className={styles.bottomRightContent}>
                 <button
