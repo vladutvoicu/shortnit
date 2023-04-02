@@ -15,12 +15,13 @@ type authFormProps = {
   resetInput: boolean;
 };
 
+type formStatusType = "loading" | "finished" | undefined;
+
 export const AuthForm = (props: authFormProps) => {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
-  const [authFormStatus, setAuthFormStatus] = useState<string | undefined>(
-    undefined
-  );
+  const [authFormStatus, setAuthFormStatus] =
+    useState<formStatusType>(undefined);
   const [emailInputValue, setEmailInputValue] = useState<string>("");
   const [validEmailInput, setValidEmailInput] = useState<boolean | undefined>(
     undefined

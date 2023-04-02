@@ -13,7 +13,9 @@ import { ImSpinner2 } from "react-icons/im";
 import mainStyles from "../Main/Main.module.css";
 import authFormStyles from "../../components/SideBar/AuthForm.module.css";
 import styles from "./PasswordReset.module.css";
-//50cd1be47a31508971fdab816e2ad43a
+
+type formStatusType = "loading" | "finished" | undefined;
+
 export const PasswordReset = () => {
   const params = useParams();
   const navigate = useNavigate();
@@ -33,7 +35,7 @@ export const PasswordReset = () => {
   const [secValidPasswordInput, setSecValidPasswordInput] = useState<
     boolean | undefined
   >(undefined);
-  const [formStatus, setFormStatus] = useState<string | undefined>(undefined);
+  const [formStatus, setFormStatus] = useState<formStatusType>(undefined);
 
   useEffect(() => {
     const getResetTokenData = async () => {

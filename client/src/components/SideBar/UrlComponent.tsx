@@ -26,15 +26,13 @@ type UrlProps = {
   ) => void;
 };
 
+type statusType = "loading" | "finished" | "awaitingAliasInput" | undefined;
+
 export const UrlComponent = (props: UrlProps) => {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
-  const [changeStatus, setChangeStatus] = useState<string | undefined>(
-    undefined
-  );
-  const [deleteStatus, setDeleteStatus] = useState<string | undefined>(
-    undefined
-  );
+  const [changeStatus, setChangeStatus] = useState<statusType>(undefined);
+  const [deleteStatus, setDeleteStatus] = useState<statusType>(undefined);
   const [validDeleteAliasInput, setValidDeleteAliasInput] = useState<
     boolean | undefined
   >(undefined);

@@ -18,11 +18,12 @@ type shortenerProps = {
   loggedIn: boolean;
 };
 
+type shortenerStatusType = "loading" | "finished" | "" | undefined;
+
 export const Shortener = (props: shortenerProps) => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const [shortenerStatus, setShortenerStatus] = useState<string | undefined>(
-    undefined
-  );
+  const [shortenerStatus, setShortenerStatus] =
+    useState<shortenerStatusType>(undefined);
   const [urlInputValue, setUrlInputValue] = useState<string>("");
   const [validUrlInput, setValidUrlInput] = useState<boolean | undefined>(
     undefined
