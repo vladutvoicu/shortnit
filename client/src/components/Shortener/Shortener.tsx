@@ -74,7 +74,9 @@ export const Shortener = (props: shortenerProps) => {
   };
 
   const handleShortener = async (
-    event: React.MouseEvent<HTMLButtonElement>
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
   ) => {
     setShortenerStatus("loading");
     var url: string = urlInputValue;
@@ -265,6 +267,13 @@ export const Shortener = (props: shortenerProps) => {
           value={urlInputValue}
           disabled={shortenerStatus === "finished" ? true : false}
           onChange={(event) => handleUrlInput(event)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              if (shortenerStatus !== "loading") {
+                handleShortener(event);
+              }
+            }
+          }}
         />
         {validUrlInput === false ? (
           <span className={styles.invalidMessage}>Invalid URL</span>
@@ -299,6 +308,13 @@ export const Shortener = (props: shortenerProps) => {
             placeholder={"alias"}
             value={aliasInputValue}
             onChange={(event) => handleAliasInput(event)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                if (shortenerStatus !== "loading") {
+                  handleShortener(event);
+                }
+              }
+            }}
           />
           {validAliasInput === false ? (
             <span className={styles.invalidMessage}>Invalid alias</span>

@@ -32,6 +32,14 @@ export const UrlComponent = (props: UrlProps) => {
   const [changeStatus, setChangeStatus] = useState<string | undefined>(
     undefined
   );
+  const [deleteStatus, setDeleteStatus] = useState<string | undefined>(
+    undefined
+  );
+  const [validDeleteAliasInput, setValidDeleteAliasInput] = useState<
+    boolean | undefined
+  >(undefined);
+  const [deleteAliasInputValue, setDeleteAliasInputValue] =
+    useState<string>("");
   const [urlData, setUrlData] = useState<Url | undefined>(undefined);
   const [urlId, setUrlId] = useState<string | undefined>("");
   const [aliasInputValue, setAliasInputValue] = useState<string>(
@@ -75,6 +83,20 @@ export const UrlComponent = (props: UrlProps) => {
     }
   };
 
+  const handleDeleteAliasInput = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDeleteAliasInputValue(event.target.value);
+
+    if (event.target.value !== "") {
+      if (event.target.value !== props.url.alias) {
+        setValidDeleteAliasInput(false);
+      }
+    } else {
+      setValidDeleteAliasInput(undefined);
+    }
+  };
+
   const isValidUrl = (url: string) => {
     var pattern =
       /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
@@ -91,8 +113,45 @@ export const UrlComponent = (props: UrlProps) => {
     }
   };
 
+  const handleUrlDelete = async (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>,
+    showInput?: boolean
+  ) => {
+    if (showInput === true) {
+      setDeleteStatus("awaitingAliasInput");
+    } else {
+      setDeleteStatus("loading");
+      var alias: string = deleteAliasInputValue;
+      var proceed: boolean = true;
+
+      // check if alias is correct
+      if (alias !== props.url.alias) {
+        setValidDeleteAliasInput(false);
+        setDeleteStatus("awaitingAliasInput");
+        proceed = false;
+      }
+
+      if (proceed === true) {
+        await fetch(`${apiUrl}/urls/delete/${urlId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(urlData),
+        });
+
+        setDeleteStatus("finished");
+        navigate("/app/urls");
+      }
+    }
+  };
+
   const handleApplyChanges = async (
-    event: React.MouseEvent<HTMLButtonElement>
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
   ) => {
     setChangeStatus("loading");
     var url: string = urlInputValue;
@@ -382,6 +441,13 @@ export const UrlComponent = (props: UrlProps) => {
               onChange={(event) => (
                 setValidAliasInput(undefined), handleAliasInput(event)
               )}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  if (changeStatus !== "loading") {
+                    handleApplyChanges(event);
+                  }
+                }
+              }}
             />
             {validAliasInput === false ? (
               <div className={authFormStyles.errorCircleContainer}>
@@ -420,6 +486,13 @@ export const UrlComponent = (props: UrlProps) => {
               onChange={(event) => (
                 setValidUrlInput(undefined), handleUrlInput(event)
               )}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  if (changeStatus !== "loading") {
+                    handleApplyChanges(event);
+                  }
+                }
+              }}
             />
             {validUrlInput === false ? (
               <div className={authFormStyles.errorCircleContainer}>
@@ -456,12 +529,71 @@ export const UrlComponent = (props: UrlProps) => {
           </span>
           <button
             className={authFormStyles.button}
-            onClick={(event) => handleApplyChanges(event)}
+            onClick={(event) =>
+              changeStatus !== "loading" ? handleApplyChanges(event) : null
+            }
           >
             {changeStatus === "loading" ? (
               <ImSpinner2 className={authFormStyles.spinner} size={"1.8rem"} />
             ) : (
               "Apply Changes"
+            )}
+          </button>
+          <div
+            className={authFormStyles.inputContainer}
+            style={{ marginTop: "50px", width: "60%" }}
+          >
+            {deleteStatus === "awaitingAliasInput" ||
+            deleteStatus === "loading" ? (
+              <input
+                className={`${authFormStyles.input} ${
+                  validDeleteAliasInput === false
+                    ? authFormStyles.invalidInput
+                    : null
+                }`}
+                value={deleteAliasInputValue}
+                onChange={(event) => (
+                  setValidDeleteAliasInput(undefined),
+                  handleDeleteAliasInput(event)
+                )}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    if (deleteStatus !== "loading") {
+                      if (deleteStatus !== "awaitingAliasInput") {
+                        handleUrlDelete(event, true);
+                      } else {
+                        handleUrlDelete(event, false);
+                      }
+                    }
+                  }
+                }}
+              />
+            ) : null}
+            {validDeleteAliasInput === false ? (
+              <div className={authFormStyles.errorCircleContainer}>
+                <BiErrorCircle
+                  className={authFormStyles.errorCircle}
+                  size={"1.3rem"}
+                />
+              </div>
+            ) : null}
+          </div>
+          <button
+            className={`${authFormStyles.button} ${styles.button}`}
+            onClick={(event) =>
+              deleteStatus !== "loading"
+                ? deleteStatus !== "awaitingAliasInput"
+                  ? handleUrlDelete(event, true)
+                  : handleUrlDelete(event, false)
+                : null
+            }
+          >
+            {deleteStatus === "loading" ? (
+              <ImSpinner2 className={authFormStyles.spinner} size={"1.8rem"} />
+            ) : deleteStatus === "awaitingAliasInput" ? (
+              "Confirm Deletion"
+            ) : (
+              "Delete URL"
             )}
           </button>
         </div>

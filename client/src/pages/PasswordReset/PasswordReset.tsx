@@ -61,7 +61,9 @@ export const PasswordReset = () => {
   }, [apiUrl, params]);
 
   const handleResetPassword = async (
-    event: React.MouseEvent<HTMLButtonElement>
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
   ) => {
     setFormStatus("loading");
     var proceed = true;
@@ -141,6 +143,13 @@ export const PasswordReset = () => {
             setValidPasswordInput(undefined),
             setPasswordInputValue(event.target.value)
           )}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              if (formStatus !== "loading") {
+                handleResetPassword(event);
+              }
+            }
+          }}
         />
         <span
           className={`${styles.invalidMessage} ${styles.invalidMessage} ${
@@ -165,6 +174,13 @@ export const PasswordReset = () => {
             setSecValidPasswordInput(undefined),
             setSecPasswordInputValue(event.target.value)
           )}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              if (formStatus !== "loading") {
+                handleResetPassword(event);
+              }
+            }
+          }}
         />
         <span
           className={`${styles.invalidMessage} ${styles.invalidMessage} ${

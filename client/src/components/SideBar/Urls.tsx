@@ -64,8 +64,12 @@ export const Urls = (props: UrlProps) => {
       setTime(body["message"].split("T")[1].split(".")[0].slice(0, -3));
     };
 
-    fetchServerSideTime();
-    fetchUrls();
+    if (props.userData !== undefined) {
+      fetchServerSideTime();
+      fetchUrls();
+    } else {
+      setUrlsStatus("fetched");
+    }
   }, [props.userData]);
 
   useEffect(() => {
@@ -262,7 +266,10 @@ export const Urls = (props: UrlProps) => {
                   className={styles.button}
                   style={
                     activeCopyButtonIndex === index
-                      ? { backgroundColor: "#2db82d", borderColor: "#2db82d" }
+                      ? {
+                          backgroundColor: "#2db82d",
+                          borderColor: "#2db82d",
+                        }
                       : {}
                   }
                   onClick={(event) =>

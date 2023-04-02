@@ -58,7 +58,9 @@ export const AuthForm = (props: authFormProps) => {
   };
 
   const handleCreateAccount = async (
-    event: React.MouseEvent<HTMLButtonElement>
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
   ) => {
     setAuthFormStatus("loading");
     var proceed = true;
@@ -127,7 +129,11 @@ export const AuthForm = (props: authFormProps) => {
     }
   };
 
-  const handleLogIn = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogIn = async (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
+  ) => {
     setAuthFormStatus("loading");
     var proceed = true;
 
@@ -227,7 +233,11 @@ export const AuthForm = (props: authFormProps) => {
     }
   };
 
-  const handleResetPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleResetPassword = (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
+  ) => {
     setAuthFormStatus("loading");
     var proceed = true;
 
@@ -291,6 +301,19 @@ export const AuthForm = (props: authFormProps) => {
               setValidEmailInput(undefined),
               setEmailInputValue(event.target.value)
             )}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                if (authFormStatus !== "loading") {
+                  if (props.authType === "login") {
+                    handleLogIn(event);
+                  } else if (props.authType === "register") {
+                    handleCreateAccount(event);
+                  } else if (props.authType === "reset") {
+                    handleResetPassword(event);
+                  }
+                }
+              }
+            }}
           />
           {validEmailInput === false ? (
             <div className={styles.errorCircleContainer}>
@@ -323,6 +346,19 @@ export const AuthForm = (props: authFormProps) => {
                 setValidPasswordInput(undefined),
                 setPasswordInputValue(event.target.value)
               )}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  if (authFormStatus !== "loading") {
+                    if (props.authType === "login") {
+                      handleLogIn(event);
+                    } else if (props.authType === "register") {
+                      handleCreateAccount(event);
+                    } else if (props.authType === "reset") {
+                      handleResetPassword(event);
+                    }
+                  }
+                }
+              }}
             />
             {validPasswordInput === false ? (
               <div className={styles.errorCircleContainer}>

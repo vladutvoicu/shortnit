@@ -147,3 +147,15 @@
   align-items: center;
   justify-content: center;
 }
+
+.button {
+  height: 47px;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid red;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background-color: red;
+}
