@@ -65,10 +65,10 @@ export const Shortener = (props: shortenerProps) => {
   };
 
   const handleAliasInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAliasInputValue(event.target.value);
+    setAliasInputValue(event.target.value.toLowerCase());
 
     if (event.target.value !== "") {
-      setValidAliasInput(isValidAlias(event.target.value));
+      setValidAliasInput(isValidAlias(event.target.value.toLowerCase()));
     } else {
       setValidAliasInput(undefined);
     }
@@ -249,7 +249,7 @@ export const Shortener = (props: shortenerProps) => {
           ? styles.initialContainer
           : shortenerStatus === "finished"
           ? styles.extendedContainer
-          : styles.container
+          : styles.initialContainer
       }`}
     >
       <div className={styles.header}>
@@ -265,6 +265,7 @@ export const Shortener = (props: shortenerProps) => {
           className={`${styles.input} ${
             validUrlInput === false ? styles.invalidInput : null
           } ${shortenerStatus === "finished" ? styles.disabledInput : null}`}
+          autoCapitalize={"none"}
           value={urlInputValue}
           disabled={shortenerStatus === "finished" ? true : false}
           onChange={(event) => handleUrlInput(event)}
@@ -306,6 +307,7 @@ export const Shortener = (props: shortenerProps) => {
             className={`${styles.input} ${
               validAliasInput === false ? styles.invalidInput : null
             }`}
+            autoCapitalize={"none"}
             placeholder={"alias"}
             value={aliasInputValue}
             onChange={(event) => handleAliasInput(event)}
@@ -330,6 +332,7 @@ export const Shortener = (props: shortenerProps) => {
         <div className={styles.inputContainer}>
           <input
             className={styles.disabledInput}
+            autoCapitalize={"none"}
             value={finalUrl}
             disabled={true}
           />

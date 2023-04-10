@@ -159,3 +159,19 @@
 .button:hover {
   background-color: red;
 }
+
+@media (max-width: 900px) {
+  .container {
+    padding: 0px;
+  }
+  .numberContainerFront {
+    background-color: #008394;
+  }
+  .progressBarPercentage {
+    background-color: #008394;
+  }
+  .statsHeader,
+  .mapItem {
+    margin-left: 10px;
+  }
+}

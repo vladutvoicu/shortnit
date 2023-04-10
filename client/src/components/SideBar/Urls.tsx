@@ -21,6 +21,7 @@ type UrlProps = {
   userData: {} | undefined;
   loggedIn: boolean;
   option?: string;
+  mobileView: boolean;
 };
 
 type UrlsStatus = "loading" | "fetched" | undefined;
@@ -99,7 +100,9 @@ export const Urls = (props: UrlProps) => {
     if (timeLapsed < 60) {
       timeLapsed === 1
         ? (timeLapsed = "a minute ago")
-        : (timeLapsed = timeLapsed + " minutes ago");
+        : timeLapsed > 1
+        ? (timeLapsed = timeLapsed + " minutes ago")
+        : (timeLapsed = "a few seconds ago");
     } else if (timeLapsed >= 60 && timeLapsed < 1440) {
       timeLapsed = String(timeLapsed / 60).split(".")[0];
       timeLapsed === "1"
@@ -206,13 +209,15 @@ export const Urls = (props: UrlProps) => {
       {urls.map((url, index) => (
         <div className={styles.urlContainer} key={url._id}>
           {index === 0 ? <div className={styles.topSeparator} /> : null}
-          <div className={styles.linkImgContainer}>
-            <img
-              className={styles.linkImg}
-              src={require("../../assets/images/link.png")}
-              alt={"link"}
-            />
-          </div>
+          {props.mobileView === false ? (
+            <div className={styles.linkImgContainer}>
+              <img
+                className={styles.linkImg}
+                src={require("../../assets/images/link.png")}
+                alt={"link"}
+              />
+            </div>
+          ) : null}
           <div className={styles.contentContainer}>
             <span className={styles.shortUrl}>{url.shortUrl}</span>
             <div className={styles.bottomContent}>
@@ -251,13 +256,21 @@ export const Urls = (props: UrlProps) => {
                   ) : null}
                 </button>
                 <button
-                  className={styles.button}
+                  className={
+                    props.loggedIn === true
+                      ? `${styles.button}`
+                      : `${styles.disabledButton}`
+                  }
                   onClick={(event) => handleEditClick(event, url)}
                 >
                   Edit
                 </button>
                 <button
-                  className={styles.button}
+                  className={
+                    props.loggedIn === true
+                      ? `${styles.button}`
+                      : `${styles.disabledButton}`
+                  }
                   onClick={(event) => handleStatsClick(event, url)}
                 >
                   Stats
@@ -292,6 +305,7 @@ export const Urls = (props: UrlProps) => {
     <UrlComponent
       url={selectedUrl}
       option={props.option}
+      mobileView={props.mobileView}
       handleEditClick={(event, url) => handleEditClick(event, url)}
       handleStatsClick={(event, url) => handleStatsClick(event, url)}
     />

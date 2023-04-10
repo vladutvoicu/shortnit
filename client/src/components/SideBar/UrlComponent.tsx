@@ -16,6 +16,7 @@ import authFormStyles from "./AuthForm.module.css";
 type UrlProps = {
   url: Url;
   option: string | undefined;
+  mobileView: boolean;
   handleEditClick: (
     event: React.MouseEvent<HTMLButtonElement>,
     url: Url
@@ -648,7 +649,10 @@ export const UrlComponent = (props: UrlProps) => {
             </div>
           </div>
           <div className={styles.contentMapContainer}>
-            <span style={{ fontSize: "1.4rem", fontFamily: "Francois One" }}>
+            <span
+              className={styles.statsHeader}
+              style={{ fontSize: "1.4rem", fontFamily: "Francois One" }}
+            >
               Top locations of total clicks
             </span>
             <div className={styles.contentMapContent}>
@@ -681,7 +685,10 @@ export const UrlComponent = (props: UrlProps) => {
             className={styles.contentMapContainer}
             style={{ paddingBottom: "50px" }}
           >
-            <span style={{ fontSize: "1.4rem", fontFamily: "Francois One" }}>
+            <span
+              className={styles.statsHeader}
+              style={{ fontSize: "1.4rem", fontFamily: "Francois One" }}
+            >
               Latest entries
             </span>
             <div className={styles.contentMapContent}>

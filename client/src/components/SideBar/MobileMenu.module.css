@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-left: 30px;
+  padding-right: 30px;
+  opacity: 0;
+  animation: 0.5s ease-out 0s 1 fadeIn forwards;
+  overflow-y: overlay;
+}
+
+@keyframes fadeIn {
+  100% {
+    opacity: 1;
+  }
+}
+
+.menuOptionsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  font-size: 1.4rem;
+}
+
+.menuOption {
+  padding-top: 20px;
+  cursor: default;
+}
+
+.menuOption:hover {
+  color: #00e1ff;
+}
+
+.menuOption:active {
+  color: #00e1ff;
+}

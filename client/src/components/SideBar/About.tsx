@@ -5,7 +5,11 @@ import { HiOutlineQrcode } from "react-icons/hi";
 // CSS
 import styles from "./About.module.css";
 
-export const About = () => {
+type AboutProps = {
+  mobileView: boolean;
+};
+
+export const About = (props: AboutProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.contentContainer}>
@@ -28,9 +32,11 @@ export const About = () => {
         </div>
       </div>
       <div className={styles.contentContainer}>
-        <div className={styles.iconContainer}>
-          <VscWand className={styles.icon} />
-        </div>
+        {props.mobileView === false ? (
+          <div className={styles.iconContainer}>
+            <VscWand className={styles.icon} />
+          </div>
+        ) : null}
         <div className={styles.textContainer}>
           <span className={styles.header}>What is a link shortener?</span>
           <span className={styles.text}>
@@ -41,6 +47,11 @@ export const About = () => {
             the tool and it is condensed into a more shareable link.
           </span>
         </div>
+        {props.mobileView === true ? (
+          <div className={styles.iconContainer}>
+            <VscWand className={styles.icon} />
+          </div>
+        ) : null}
       </div>
       <div className={styles.contentContainer}>
         <div className={styles.textContainer}>

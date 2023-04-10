@@ -66,3 +66,22 @@
   height: 90px;
   width: 90px;
 }
+
+@media (max-width: 900px) {
+  .container {
+    padding: 0;
+  }
+
+  .header {
+    text-align: center;
+  }
+
+  .contentContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .iconContainer {
+    margin-top: 30px;
+  }
+}
