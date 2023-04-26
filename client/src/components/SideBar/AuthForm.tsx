@@ -20,6 +20,7 @@ type formStatusType = "loading" | "finished" | undefined;
 export const AuthForm = (props: authFormProps) => {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY!;
   const [authFormStatus, setAuthFormStatus] =
     useState<formStatusType>(undefined);
   const [emailInputValue, setEmailInputValue] = useState<string>("");
@@ -97,6 +98,7 @@ export const AuthForm = (props: authFormProps) => {
               method: "PATCH",
               headers: {
                 "Content-type": "application/json",
+                Authorization: apiKey,
               },
               body: JSON.stringify({ ...userData }),
             }
@@ -108,6 +110,7 @@ export const AuthForm = (props: authFormProps) => {
           method: "POST",
           headers: {
             "Content-type": "application/json",
+            Authorization: apiKey,
           },
           body: JSON.stringify(userData),
         });
@@ -158,6 +161,7 @@ export const AuthForm = (props: authFormProps) => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
+          Authorization: apiKey,
         },
       });
       const userBody: any = await res.json();
@@ -173,6 +177,7 @@ export const AuthForm = (props: authFormProps) => {
                   method: "GET",
                   headers: {
                     "Content-type": "application/json",
+                    Authorization: apiKey,
                   },
                 }
               );
@@ -191,6 +196,7 @@ export const AuthForm = (props: authFormProps) => {
                   method: "PATCH",
                   headers: {
                     "Content-type": "application/json",
+                    Authorization: apiKey,
                   },
                   body: JSON.stringify(urlData),
                 });
@@ -200,6 +206,7 @@ export const AuthForm = (props: authFormProps) => {
                 method: "DELETE",
                 headers: {
                   "Content-type": "application/json",
+                  Authorization: apiKey,
                 },
               });
             }
@@ -253,6 +260,7 @@ export const AuthForm = (props: authFormProps) => {
           method: "POST",
           headers: {
             "Content-type": "application/json",
+            Authorization: apiKey,
           },
           body: JSON.stringify({ email: emailInputValue }),
         }).then((res) => {

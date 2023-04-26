@@ -32,6 +32,7 @@ type statusType = "loading" | "finished" | "awaitingAliasInput" | undefined;
 export const UrlComponent = (props: UrlProps) => {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY!;
   const [changeStatus, setChangeStatus] = useState<statusType>(undefined);
   const [deleteStatus, setDeleteStatus] = useState<statusType>(undefined);
   const [validDeleteAliasInput, setValidDeleteAliasInput] = useState<
@@ -137,6 +138,7 @@ export const UrlComponent = (props: UrlProps) => {
           method: "DELETE",
           headers: {
             "Content-type": "application/json",
+            Authorization: apiKey,
           },
           body: JSON.stringify(urlData),
         });
@@ -192,7 +194,13 @@ export const UrlComponent = (props: UrlProps) => {
     }
 
     // check if alias isn't already in use
-    const res = await fetch(`${apiUrl}/urls/get`);
+    const res = await fetch(`${apiUrl}/urls/get`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: apiKey,
+      },
+    });
     const urlsData = await res.json();
 
     for (let i = 0; i < urlsData["urls"].length; i++) {
@@ -223,6 +231,7 @@ export const UrlComponent = (props: UrlProps) => {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
+          Authorization: apiKey,
         },
         body: JSON.stringify(urlData),
       });
@@ -550,6 +559,7 @@ export const UrlComponent = (props: UrlProps) => {
                     ? authFormStyles.invalidInput
                     : null
                 }`}
+                placeholder="alias"
                 value={deleteAliasInputValue}
                 onChange={(event) => (
                   setValidDeleteAliasInput(undefined),

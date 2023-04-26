@@ -22,6 +22,7 @@ type shortenerStatusType = "loading" | "finished" | "" | undefined;
 
 export const Shortener = (props: shortenerProps) => {
   const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY!;
   const [shortenerStatus, setShortenerStatus] =
     useState<shortenerStatusType>(undefined);
   const [urlInputValue, setUrlInputValue] = useState<string>("");
@@ -119,7 +120,13 @@ export const Shortener = (props: shortenerProps) => {
     }
 
     // check if alias isn't already in use
-    const res = await fetch(`${apiUrl}/urls/get`);
+    const res = await fetch(`${apiUrl}/urls/get`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: apiKey,
+      },
+    });
     const urlsData = await res.json();
 
     for (let i = 0; i < urlsData["urls"].length; i++) {
@@ -149,6 +156,7 @@ export const Shortener = (props: shortenerProps) => {
           method: "POST",
           headers: {
             "Content-type": "application/json",
+            Authorization: apiKey,
           },
           body: JSON.stringify({ tempUser: true }),
         }).then(async (res) => {
@@ -200,6 +208,7 @@ export const Shortener = (props: shortenerProps) => {
         method: "POST",
         headers: {
           "Content-type": "application/json",
+          Authorization: apiKey,
         },
         body: JSON.stringify(urlData),
       }).then((res) => {

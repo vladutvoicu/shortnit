@@ -12,6 +12,7 @@ import styles from "./Redirect.module.css";
 export const Redirect = () => {
   const params = useParams();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY!;
   const [sourceUrl, setSourceUrl] = useState<string | undefined>("");
 
   useEffect(() => {
@@ -35,7 +36,13 @@ export const Redirect = () => {
         };
 
         (async () => {
-          const res = await fetch(`${apiUrl}/urls/get`);
+          const res = await fetch(`${apiUrl}/urls/get`, {
+            method: "GET",
+            headers: {
+              "Content-type": "application/json",
+              Authorization: apiKey,
+            },
+          });
           const body: any = await res.json();
 
           for (let i = 0; i < body["urls"].length; i++) {
@@ -81,6 +88,7 @@ export const Redirect = () => {
                 method: "PATCH",
                 headers: {
                   "Content-type": "application/json",
+                  Authorization: apiKey,
                 },
                 body: JSON.stringify(urlData),
               });

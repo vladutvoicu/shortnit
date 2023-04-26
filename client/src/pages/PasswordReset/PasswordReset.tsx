@@ -20,6 +20,7 @@ export const PasswordReset = () => {
   const params = useParams();
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY!;
   const [validResetToken, setValidResetToken] = useState<boolean | undefined>(
     undefined
   );
@@ -39,7 +40,13 @@ export const PasswordReset = () => {
 
   useEffect(() => {
     const getResetTokenData = async () => {
-      const res = await fetch(`${apiUrl}/resetTokens/get`);
+      const res = await fetch(`${apiUrl}/resetTokens/get`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: apiKey,
+        },
+      });
       const body: any = await res.json();
 
       for (let i = 0; i < body["resetTokens"].length; i++) {
@@ -91,6 +98,7 @@ export const PasswordReset = () => {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
+          Authorization: apiKey,
         },
         body: JSON.stringify(userData),
       })
@@ -100,6 +108,7 @@ export const PasswordReset = () => {
               method: "DELETE",
               headers: {
                 "Content-type": "application/json",
+                Authorization: apiKey,
               },
             })
         )

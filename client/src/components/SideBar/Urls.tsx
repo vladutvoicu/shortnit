@@ -29,6 +29,7 @@ type UrlsStatus = "loading" | "fetched" | undefined;
 export const Urls = (props: UrlProps) => {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY!;
   const state = useLocation();
   const [urlsStatus, setUrlsStatus] = useState<UrlsStatus>("loading");
   const [urls, setUrls] = useState<Url[]>([]);
@@ -50,7 +51,14 @@ export const Urls = (props: UrlProps) => {
       const res = await fetch(
         `${apiUrl}/urls/get/${
           props.userData!["user" as keyof typeof props.userData]
-        }`
+        }`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: apiKey,
+          },
+        }
       );
       const body: any = await res.json();
       setUrls(body["urls"]);
