@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { config } from "../config/config";
 
 const apiAuth = (req: Request, res: Response, next: NextFunction) => {
-    const apiKey = req.headers["Authorization"];
+    const apiKey = req.headers.authorization;
     if (!apiKey) {
         return res.status(401).json({ message: "API key missing" });
     }
