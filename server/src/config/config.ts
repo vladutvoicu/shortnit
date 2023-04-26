@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const API_KEY = process.env.API_KEY || "";
 const MONGO_USERNAME = process.env.MONGO_USERNAME || "";
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD || "";
 const DB_NAME = process.env.DB_NAME || "";
@@ -19,6 +20,7 @@ export const config = {
     },
     server: {
         port: SERVER_PORT,
+        api_key: API_KEY,
     },
     smtp_credentials: {
         email: SMTP_EMAIL,
