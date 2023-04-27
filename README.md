@@ -39,7 +39,7 @@ Each of the packages have their own package.json file, so they define their depe
 │   │   └───App.tsx       // App routing
 │   └───package.json
 └───server
-    └───src
+    ├───src
     │   ├───config         // Configuration file for the server
     │   ├───controllers    // Controller functions for handling HTTP requests
     │   ├───library        // Utility functions used throughout the server application
