@@ -1,6 +1,6 @@
 # :link: ShortnIt
 
-Monorepo of a URL shortening service: https://shortnit.web.app/
+Monorepo of a URL shortening service with incorporated statistics: https://shortnit.web.app/
 
 &nbsp;
 
@@ -25,18 +25,18 @@ Each of the packages have their own package.json file, so they define their depe
 ├───client
 │   ├───public
 │   ├───src
-│   │   ├───assets        // Static assets
+│   │   ├───assets         // Static assets
 │   │   │   └───images
-│   │   ├───components    // Reusable components
+│   │   ├───components     // Reusable components
 │   │   │   ├───Features
 │   │   │   ├───Shortener
 │   │   │   └───SideBar
-│   │   ├───pages         // Pages that are rendered by the router
+│   │   ├───pages          // Pages that are rendered by the router
 │   │   │   ├───Main
 │   │   │   ├───PasswordReset
 │   │   │   └───Redirect
-│   │   ├───types         // Type definitions
-│   │   └───App.tsx       // App routing
+│   │   ├───types          // Type definitions
+│   │   └───App.tsx        // App routing
 │   └───package.json
 └───server
     ├───src
